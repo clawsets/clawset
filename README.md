@@ -76,6 +76,41 @@ export const mypresetPreset: ClawPreset = {
 4. Run `pnpm build` — the preset is auto-discovered and registered
 
 
+## Versioning & changelogs
+
+Each preset is versioned independently via the `version` field in its `spec.json`. Changelogs are generated with [git-cliff](https://git-cliff.org), scoped to commits that touch the preset's directory.
+
+**Workflow after changing a preset:**
+
+1. Commit your change with a [conventional commit](https://www.conventionalcommits.org) message:
+   ```bash
+   git add presets/autopm/AGENTS.md
+   git commit -m "docs: update agent instructions for autopm"
+   ```
+
+2. Bump the version in `presets/<preset>/spec.json` (`patch`, `minor`, or `major` as appropriate):
+   ```bash
+   git add presets/autopm/spec.json
+   git commit -m "chore: bump autopm to 0.1.1"
+   ```
+
+3. Generate the changelog:
+   ```bash
+   pnpm changelog autopm
+   ```
+
+4. Commit the updated changelog:
+   ```bash
+   git add presets/autopm/CHANGELOG.md
+   git commit -m "docs: update autopm changelog"
+   ```
+
+You can also generate a root-level changelog covering all commits:
+
+```bash
+pnpm changelog
+```
+
 ## Links
 
 - [ClawSets](https://clawsets.ai)
