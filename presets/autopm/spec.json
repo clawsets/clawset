@@ -1,0 +1,8 @@
+{
+  "$schema": "https://clawsets.ai/schema.json",
+  "name": "autopm",
+  "description": "Autonomous project manager that triages issues, assigns tasks, and generates standups",
+  "requiredSkills": ["github", "slack"],
+  "requiredSecrets": ["GITHUB_TOKEN"],
+  "cron": "0 9 * * 1-5"
+}

@@ -1,6 +1,4 @@
 import { defineConfig } from "tsup";
-import path from "node:path";
-
 export default defineConfig({
   entry: ["src/index.ts"],
   format: ["esm"],
@@ -11,10 +9,5 @@ export default defineConfig({
   sourcemap: true,
   banner: {
     js: "#!/usr/bin/env node",
-  },
-  esbuildOptions(options) {
-    options.alias = {
-      "#presets": path.resolve(import.meta.dirname, "../../presets"),
-    };
   },
 });

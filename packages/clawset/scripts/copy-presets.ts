@@ -23,8 +23,8 @@ for (const entry of presetFolders) {
 
   const files = fs.readdirSync(presetSrcDir);
   for (const file of files) {
-    // Skip TypeScript source files — only copy workspace templates
-    if (file.endsWith(".ts")) continue;
+    // Skip TypeScript source files and JSON specs — only copy workspace templates
+    if (file.endsWith(".ts") || file.endsWith(".json")) continue;
 
     fs.copyFileSync(
       path.join(presetSrcDir, file),

@@ -16,8 +16,13 @@ describe("ClawPresetSchema", () => {
   });
 
   it("accepts a preset without cron (optional)", () => {
-    const { cron: _, ...withoutCron } = validPreset;
-    const result = ClawPresetSchema.safeParse(withoutCron);
+    const { name, description, requiredSkills, requiredSecrets } = validPreset;
+    const result = ClawPresetSchema.safeParse({
+      name,
+      description,
+      requiredSkills,
+      requiredSecrets,
+    });
     expect(result.success).toBe(true);
   });
 
