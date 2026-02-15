@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const presetsDir = path.resolve(__dirname, "../../../presets");
-const destDir = path.resolve(__dirname, "../dist/templates");
+const destDir = path.resolve(__dirname, "../dist/presets");
 
 // Ensure dest directory exists
 fs.mkdirSync(destDir, { recursive: true });

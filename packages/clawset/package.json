@@ -35,7 +35,13 @@
     "preset",
     "automation"
   ],
+  "author": "Afshin Mehrabani",
   "license": "MIT",
+  "homepage": "https://clawsets.ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clawsets/clawset"
+  },
   "dependencies": {
     "@inquirer/prompts": "^7.0.0",
     "axios": "^1.7.0",

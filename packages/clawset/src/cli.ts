@@ -19,7 +19,7 @@ import "./generated/preset-registry.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function resolveTemplateDir(folderName: string): string {
-  return path.resolve(__dirname, "templates", folderName);
+  return path.resolve(__dirname, "presets", folderName);
 }
 
 const VERSION = "0.1.0";
