@@ -47,10 +47,6 @@ export async function setupWorkspace(
     const dest = path.join(workspaceDir, file);
     await fs.copyFile(src, dest);
   }
-
-  // Remove default bootstrap file — preset is fully configured
-  const bootstrapPath = path.join(workspaceDir, "BOOTSTRAP.md");
-  await fs.rm(bootstrapPath, { force: true });
 }
 
 export async function runAgent(

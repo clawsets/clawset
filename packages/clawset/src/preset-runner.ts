@@ -4,7 +4,7 @@ import { validateAll } from "./utils/validator.js";
 import * as openclaw from "./utils/openclaw.js";
 import { checkSkills } from "./utils/skills.js";
 import { setSecrets } from "./utils/secrets.js";
-import { setupSchedule } from "./utils/scheduler.js";
+import { removeSchedule, setupSchedule } from "./utils/scheduler.js";
 
 const PRESET_PREFIX = "clawset-";
 
@@ -95,7 +95,11 @@ export async function runPreset(
     await openclaw.selectModel();
     results.push({ step: "Selecting model", success: true, message: "OK" });
   } catch {
-    results.push({ step: "Selecting model", success: false, message: "skipped" });
+    results.push({
+      step: "Selecting model",
+      success: false,
+      message: "skipped",
+    });
     console.log(
       theme.warn(
         "\n  Model selection was cancelled or failed. " +
@@ -105,6 +109,91 @@ export async function runPreset(
   }
 
   printSummary(preset, agentName, results);
+}
+
+export async function upgradePreset(
+  preset: ClawPreset,
+  agentName: string,
+  resolveTemplateDir: (folderName: string) => string
+): Promise<void> {
+  console.log(
+    theme.heading(`\n  Upgrading preset: `) +
+      theme.command(qualifiedName(preset)) +
+      theme.muted(` (agent: ${agentName})\n`)
+  );
+
+  const results: StepResult[] = [];
+
+  const steps: Array<{ label: string; fn: () => Promise<void> }> = [
+    {
+      label: "Updating workspace files",
+      fn: async () => {
+        const templateDir = resolveTemplateDir(preset.name);
+        await openclaw.setupWorkspace(agentName, templateDir);
+      },
+    },
+    {
+      label: "Checking skills",
+      fn: async () => {
+        await checkSkills(preset.requiredSkills);
+      },
+    },
+    {
+      label: "Checking secrets",
+      fn: () => setSecrets(preset.requiredSecrets),
+    },
+    {
+      label: "Updating scheduler",
+      fn: async () => {
+        if (preset.cron) {
+          try {
+            await removeSchedule(agentName);
+          } catch {
+            // no existing schedule to remove
+          }
+          await setupSchedule(agentName, preset.cron);
+        }
+      },
+    },
+  ];
+
+  for (const step of steps) {
+    process.stdout.write(theme.info(`  ${step.label}...`));
+    try {
+      await step.fn();
+      console.log(theme.success(" done"));
+      results.push({ step: step.label, success: true, message: "OK" });
+    } catch (error) {
+      console.log(theme.error(" failed"));
+      const err = error as Error;
+      console.error(theme.error(`\n  Error: ${err.message}\n`));
+      process.exit(1);
+    }
+  }
+
+  const allPassed = results.every((r) => r.success);
+  console.log(
+    allPassed
+      ? theme.success(
+          `\n  Preset "${qualifiedName(preset)}" upgraded successfully!\n`
+        )
+      : theme.warn(
+          `\n  Preset "${qualifiedName(preset)}" upgraded with warnings.\n`
+        )
+  );
+  for (const r of results) {
+    const icon = r.success ? theme.success("\u2713") : theme.error("\u2717");
+    console.log(`  ${icon} ${theme.muted(r.step)}`);
+  }
+  console.log(
+    theme.muted(
+      `\n  Run: openclaw agent --agent ${agentName} -m "your prompt here"`
+    )
+  );
+  if (preset.cron) {
+    console.log(theme.muted(`  Scheduled: ${preset.cron}`));
+  }
+  console.log();
 }
 
 function printSummary(

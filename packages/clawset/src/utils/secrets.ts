@@ -1,10 +1,7 @@
 import chalk from "chalk";
 import * as openclaw from "./openclaw.js";
 
-export function validateSecretFormat(
-  secretName: string,
-  value: string
-): void {
+export function validateSecretFormat(secretName: string, value: string): void {
   if (secretName.includes("OPENAI") && !value.startsWith("sk-")) {
     throw new Error(
       `${secretName} appears invalid. OpenAI API keys start with "sk-". ` +

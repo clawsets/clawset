@@ -24,8 +24,7 @@ export async function removeSchedule(agentName: string): Promise<void> {
     const filtered = existingCrontab
       .split("\n")
       .filter(
-        (line) =>
-          !(line.includes(CRONTAB_MARKER) && line.includes(agentName))
+        (line) => !(line.includes(CRONTAB_MARKER) && line.includes(agentName))
       )
       .join("\n");
 
@@ -53,10 +52,7 @@ export async function setupSchedule(
   await setupCrontab(presetName, cron);
 }
 
-async function setupCrontab(
-  presetName: string,
-  cron: string
-): Promise<void> {
+async function setupCrontab(presetName: string, cron: string): Promise<void> {
   try {
     let existingCrontab = "";
     try {

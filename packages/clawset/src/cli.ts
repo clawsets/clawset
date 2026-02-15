@@ -8,10 +8,15 @@ import {
   qualifiedName,
   listPresets,
   runPreset,
+  upgradePreset,
 } from "./preset-runner.js";
 import * as openclaw from "./utils/openclaw.js";
 import { removeSchedule } from "./utils/scheduler.js";
-import { promptAgentName, confirmDelete } from "./utils/prompt.js";
+import {
+  promptAgentName,
+  confirmUpgrade,
+  confirmDelete,
+} from "./utils/prompt.js";
 
 // Side-effect import: auto-discovers and registers all presets at build time
 import "./generated/preset-registry.js";
@@ -34,13 +39,16 @@ function bannerLine(): string {
 
 function themeHelp(raw: string): string {
   return raw
-    .replace(/^(Usage:)( .+)$/m, (_m, label, rest) =>
-      theme.heading(label) + theme.muted(rest)
+    .replace(
+      /^(Usage:)( .+)$/m,
+      (_m, label, rest) => theme.heading(label) + theme.muted(rest)
     )
     .replace(/^(Commands:)$/m, (_m, label) => theme.heading(label))
     .replace(/^(Options:)$/m, (_m, label) => theme.heading(label))
-    .replace(/^(  )(\S.+?)( {2,})(.+)$/gm, (_m, indent, term, gap, desc) =>
-      `${indent}${theme.command(term)}${gap}${theme.muted(desc)}`
+    .replace(
+      /^(  )(\S.+?)( {2,})(.+)$/gm,
+      (_m, indent, term, gap, desc) =>
+        `${indent}${theme.command(term)}${gap}${theme.muted(desc)}`
     )
     .replace(/^( {30,}\S.+)$/gm, (_m, line) => theme.muted(line))
     .replace(/^([A-Z][^:\n].+)$/gm, (_m, desc) => theme.accentDim(desc));
@@ -52,7 +60,11 @@ export function createProgram(): Command {
   // Argv rewriting: if the first arg after node+script is not a known
   // subcommand, treat it as a shorthand for `install <preset>`
   const args = process.argv.slice(2);
-  if (args.length > 0 && !args[0].startsWith("-") && !KNOWN_SUBCOMMANDS.includes(args[0])) {
+  if (
+    args.length > 0 &&
+    !args[0].startsWith("-") &&
+    !KNOWN_SUBCOMMANDS.includes(args[0])
+  ) {
     process.argv.splice(2, 0, "install");
   }
 
@@ -60,9 +72,7 @@ export function createProgram(): Command {
 
   program
     .name("clawset")
-    .description(
-      "Install and configure OpenClaw presets with a single command"
-    )
+    .description("Install and configure OpenClaw presets with a single command")
     .version(VERSION)
     .configureOutput({
       writeOut: (str) => process.stdout.write(themeHelp(str)),
@@ -79,35 +89,74 @@ export function createProgram(): Command {
     .description("Install a preset (use the short name, e.g. autopm)")
     .option("--dry-run", "Show what would be done without making changes")
     .option("--name <agentName>", "Agent name (skips interactive prompt)")
-    .action(async (presetArg: string, options: { dryRun?: boolean; name?: string }) => {
-      const preset = getPreset(presetArg);
-      if (!preset) {
-        console.error(
-          theme.error(`Unknown preset: "${presetArg}"\n`) +
-            theme.muted('Run "clawset list" to see available presets.')
-        );
-        process.exit(1);
-      }
-
-      const defaultName = qualifiedName(preset);
-      const agentName = options.name ?? (await promptAgentName(defaultName));
-
-      if (options.dryRun) {
-        console.log(theme.heading("  Dry run \u2014 no changes will be made.\n"));
-        console.log(`  ${theme.muted("Preset:")}      ${theme.command(qualifiedName(preset))}`);
-        console.log(`  ${theme.muted("Agent name:")}  ${theme.info(agentName)}`);
-        console.log(`  ${theme.muted("Template:")}    ${theme.muted(resolveTemplateDir(preset.name))}`);
-        console.log(`  ${theme.muted("Skills:")}      ${theme.accent(preset.requiredSkills.join(", "))}`);
-        console.log(`  ${theme.muted("Secrets:")}     ${theme.accent(preset.requiredSecrets.join(", "))}`);
-        if (preset.cron) {
-          console.log(`  ${theme.muted("Schedule:")}    ${theme.accent(preset.cron)}`);
+    .action(
+      async (
+        presetArg: string,
+        options: { dryRun?: boolean; name?: string }
+      ) => {
+        const preset = getPreset(presetArg);
+        if (!preset) {
+          console.error(
+            theme.error(`Unknown preset: "${presetArg}"\n`) +
+              theme.muted('Run "clawset list" to see available presets.')
+          );
+          process.exit(1);
         }
-        console.log();
-        return;
-      }
 
-      await runPreset(preset, agentName, resolveTemplateDir);
-    });
+        const defaultName = qualifiedName(preset);
+        const agentName = options.name ?? (await promptAgentName(defaultName));
+
+        if (options.dryRun) {
+          console.log(
+            theme.heading("  Dry run \u2014 no changes will be made.\n")
+          );
+          console.log(
+            `  ${theme.muted("Preset:")}      ${theme.command(qualifiedName(preset))}`
+          );
+          console.log(
+            `  ${theme.muted("Agent name:")}  ${theme.info(agentName)}`
+          );
+          console.log(
+            `  ${theme.muted("Template:")}    ${theme.muted(resolveTemplateDir(preset.name))}`
+          );
+          console.log(
+            `  ${theme.muted("Skills:")}      ${theme.accent(preset.requiredSkills.join(", "))}`
+          );
+          console.log(
+            `  ${theme.muted("Secrets:")}     ${theme.accent(preset.requiredSecrets.join(", "))}`
+          );
+          if (preset.cron) {
+            console.log(
+              `  ${theme.muted("Schedule:")}    ${theme.accent(preset.cron)}`
+            );
+          }
+          console.log();
+          return;
+        }
+
+        // Check if already installed
+        const wsPath = openclaw.agentWorkspacePath(agentName);
+        let installed = false;
+        try {
+          await fs.access(wsPath);
+          installed = true;
+        } catch {
+          // not installed
+        }
+
+        if (installed) {
+          const shouldUpgrade = await confirmUpgrade(agentName);
+          if (!shouldUpgrade) {
+            console.log(theme.muted("\n  Cancelled.\n"));
+            return;
+          }
+          await upgradePreset(preset, agentName, resolveTemplateDir);
+          return;
+        }
+
+        await runPreset(preset, agentName, resolveTemplateDir);
+      }
+    );
 
   // --- list ---
   program
@@ -130,12 +179,18 @@ export function createProgram(): Command {
           ? theme.success("\u2714")
           : theme.muted("\u2022");
         const status = installed ? " " + theme.success("(installed)") : "";
-        console.log(`  ${marker} ${theme.command(qName)} ${theme.muted(`(${p.name})`)}${status}`);
+        console.log(`  ${marker} ${theme.command(p.name)}${status}`);
         console.log(theme.muted(`    ${p.description}`));
-        console.log(`    ${theme.muted("Skills:")} ${theme.accent(p.requiredSkills.join(", "))}`);
-        console.log(`    ${theme.muted("Secrets:")} ${theme.accent(p.requiredSecrets.join(", "))}`);
+        console.log(
+          `    ${theme.muted("Skills:")} ${theme.accent(p.requiredSkills.join(", "))}`
+        );
+        console.log(
+          `    ${theme.muted("Secrets:")} ${theme.accent(p.requiredSecrets.join(", "))}`
+        );
         if (p.cron) {
-          console.log(`    ${theme.muted("Schedule:")} ${theme.accent(p.cron)}`);
+          console.log(
+            `    ${theme.muted("Schedule:")} ${theme.accent(p.cron)}`
+          );
         }
         console.log();
       }
