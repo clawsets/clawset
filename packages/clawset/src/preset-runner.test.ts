@@ -11,8 +11,7 @@ const testPreset: ClawPreset = {
   name: "autopm",
   version: "1.0.0",
   description: "Autonomous project manager",
-  requiredSkills: ["github", "slack"],
-  requiredSecrets: ["GITHUB_TOKEN"],
+  skills: ["github", "slack"],
   cron: "0 9 * * 1-5",
 };
 
@@ -20,8 +19,7 @@ const testPreset2: ClawPreset = {
   name: "devbot",
   version: "1.0.0",
   description: "Developer assistant",
-  requiredSkills: ["github"],
-  requiredSecrets: [],
+  skills: ["github"],
 };
 
 describe("preset registry", () => {

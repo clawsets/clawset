@@ -6,8 +6,7 @@ describe("ClawPresetSchema", () => {
     name: "autopm",
     version: "0.1.0",
     description: "Autonomous project manager",
-    requiredSkills: ["github", "slack"],
-    requiredSecrets: ["GITHUB_TOKEN"],
+    skills: ["github", "slack"],
     cron: "0 9 * * 1-5",
   };
 
@@ -17,22 +16,12 @@ describe("ClawPresetSchema", () => {
   });
 
   it("accepts a preset without cron (optional)", () => {
-    const { name, version, description, requiredSkills, requiredSecrets } =
-      validPreset;
+    const { name, version, description, skills } = validPreset;
     const result = ClawPresetSchema.safeParse({
       name,
       version,
       description,
-      requiredSkills,
-      requiredSecrets,
-    });
-    expect(result.success).toBe(true);
-  });
-
-  it("accepts a preset with empty requiredSecrets", () => {
-    const result = ClawPresetSchema.safeParse({
-      ...validPreset,
-      requiredSecrets: [],
+      skills,
     });
     expect(result.success).toBe(true);
   });
@@ -42,10 +31,10 @@ describe("ClawPresetSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("rejects a preset with empty requiredSkills", () => {
+  it("rejects a preset with empty skills", () => {
     const result = ClawPresetSchema.safeParse({
       ...validPreset,
-      requiredSkills: [],
+      skills: [],
     });
     expect(result.success).toBe(false);
   });

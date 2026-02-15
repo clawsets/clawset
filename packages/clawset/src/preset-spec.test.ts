@@ -40,7 +40,7 @@ describe("preset specs", () => {
     });
 
     it("requires at least one skill", () => {
-      expect(preset.requiredSkills.length).toBeGreaterThan(0);
+      expect(preset.skills.length).toBeGreaterThan(0);
     });
 
     it("has a version matching semver format", () => {

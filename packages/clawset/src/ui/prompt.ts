@@ -41,6 +41,41 @@ export async function confirmLaunch(): Promise<boolean> {
   }
 }
 
+export async function confirmHubInstall(
+  skill: string,
+  summary: string
+): Promise<boolean> {
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  try {
+    const answer = await rl.question(
+      theme.accent(`\n    "${skill}" found on ClawHub`) +
+        theme.muted(` — ${summary}\n`) +
+        theme.info("    Install? ") +
+        theme.muted("[Y/n]: ")
+    );
+    const input = answer.trim().toLowerCase();
+    return input === "" || input === "y";
+  } finally {
+    rl.close();
+  }
+}
+
+export async function confirmConfigure(sections: string[]): Promise<boolean> {
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  try {
+    const label = sections.join(", ");
+    const answer = await rl.question(
+      theme.accent(
+        `  This preset needs additional configuration (${label}). Configure now? `
+      ) + theme.muted("[Y/n]: ")
+    );
+    const input = answer.trim().toLowerCase();
+    return input === "" || input === "y";
+  } finally {
+    rl.close();
+  }
+}
+
 export async function confirmDelete(agentName: string): Promise<boolean> {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
   try {

@@ -3,9 +3,8 @@ import { theme } from "./ui/theme.js";
 import { validateAll } from "./openclaw/validator.js";
 import * as openclaw from "./openclaw/client.js";
 import { checkSkills } from "./openclaw/skills.js";
-import { setSecrets } from "./openclaw/secrets.js";
 import { removeSchedule, setupSchedule } from "./openclaw/scheduler.js";
-import { confirmLaunch } from "./ui/prompt.js";
+import { confirmConfigure, confirmLaunch } from "./ui/prompt.js";
 
 const START_MESSAGE =
   "Hey! I just came online. Walk me through the initial setup — let's get started.";
@@ -43,6 +42,7 @@ export async function runPreset(
   );
 
   const results: StepResult[] = [];
+  let configureSections: string[] = [];
 
   const steps: Array<{ label: string; fn: () => Promise<void> }> = [
     {
@@ -63,12 +63,20 @@ export async function runPreset(
     {
       label: "Checking skills",
       fn: async () => {
-        await checkSkills(preset.requiredSkills);
+        const skillResults = await checkSkills(preset.skills);
+        const notFound = skillResults
+          .filter((r) => !r.found)
+          .map((r) => r.skill);
+        if (notFound.length > 0) {
+          throw new Error(
+            `Required skills not found: ${notFound.join(", ")}. See https://docs.openclaw.ai/cli/skills`
+          );
+        }
+        const sections = [...(preset.configure ?? [])];
+        const hasMissingEnv = skillResults.some((r) => r.missingEnv.length > 0);
+        if (hasMissingEnv) sections.push("skills");
+        configureSections = [...new Set(sections)];
       },
-    },
-    {
-      label: "Setting secrets",
-      fn: () => setSecrets(preset.requiredSecrets),
     },
     {
       label: "Setting up scheduler",
@@ -91,6 +99,28 @@ export async function runPreset(
       const err = error as Error;
       console.error(theme.error(`\n  Error: ${err.message}\n`));
       process.exit(1);
+    }
+  }
+
+  if (configureSections.length > 0) {
+    const shouldConfigure = await confirmConfigure(configureSections);
+    if (shouldConfigure) {
+      try {
+        await openclaw.runConfigure(configureSections);
+        results.push({ step: "Configuration", success: true, message: "OK" });
+      } catch {
+        results.push({
+          step: "Configuration",
+          success: false,
+          message: "skipped",
+        });
+        console.log(
+          theme.warn(
+            "\n  Configuration was cancelled or failed. " +
+              `You can configure it later with: openclaw configure ${configureSections.map((s) => `--section ${s}`).join(" ")}\n`
+          )
+        );
+      }
     }
   }
 
@@ -128,6 +158,7 @@ export async function upgradePreset(
   );
 
   const results: StepResult[] = [];
+  let configureSections: string[] = [];
 
   const steps: Array<{ label: string; fn: () => Promise<void> }> = [
     {
@@ -140,12 +171,20 @@ export async function upgradePreset(
     {
       label: "Checking skills",
       fn: async () => {
-        await checkSkills(preset.requiredSkills);
+        const skillResults = await checkSkills(preset.skills);
+        const notFound = skillResults
+          .filter((r) => !r.found)
+          .map((r) => r.skill);
+        if (notFound.length > 0) {
+          throw new Error(
+            `Required skills not found: ${notFound.join(", ")}. See https://docs.openclaw.ai/cli/skills`
+          );
+        }
+        const sections = [...(preset.configure ?? [])];
+        const hasMissingEnv = skillResults.some((r) => r.missingEnv.length > 0);
+        if (hasMissingEnv) sections.push("skills");
+        configureSections = [...new Set(sections)];
       },
-    },
-    {
-      label: "Checking secrets",
-      fn: () => setSecrets(preset.requiredSecrets),
     },
     {
       label: "Updating scheduler",
@@ -173,6 +212,28 @@ export async function upgradePreset(
       const err = error as Error;
       console.error(theme.error(`\n  Error: ${err.message}\n`));
       process.exit(1);
+    }
+  }
+
+  if (configureSections.length > 0) {
+    const shouldConfigure = await confirmConfigure(configureSections);
+    if (shouldConfigure) {
+      try {
+        await openclaw.runConfigure(configureSections);
+        results.push({ step: "Configuration", success: true, message: "OK" });
+      } catch {
+        results.push({
+          step: "Configuration",
+          success: false,
+          message: "skipped",
+        });
+        console.log(
+          theme.warn(
+            "\n  Configuration was cancelled or failed. " +
+              `You can configure it later with: openclaw configure ${configureSections.map((s) => `--section ${s}`).join(" ")}\n`
+          )
+        );
+      }
     }
   }
 

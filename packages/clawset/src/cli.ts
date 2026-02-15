@@ -118,10 +118,7 @@ export function createProgram(): Command {
             `  ${theme.muted("Template:")}    ${theme.muted(resolveTemplateDir(preset.name))}`
           );
           console.log(
-            `  ${theme.muted("Skills:")}      ${theme.accent(preset.requiredSkills.join(", "))}`
-          );
-          console.log(
-            `  ${theme.muted("Secrets:")}     ${theme.accent(preset.requiredSecrets.join(", "))}`
+            `  ${theme.muted("Skills:")}      ${theme.accent(preset.skills.join(", "))}`
           );
           if (preset.cron) {
             console.log(
@@ -180,10 +177,7 @@ export function createProgram(): Command {
         console.log(`  ${marker} ${theme.command(p.name)}${status}`);
         console.log(theme.muted(`    ${p.description}`));
         console.log(
-          `    ${theme.muted("Skills:")} ${theme.accent(p.requiredSkills.join(", "))}`
-        );
-        console.log(
-          `    ${theme.muted("Secrets:")} ${theme.accent(p.requiredSecrets.join(", "))}`
+          `    ${theme.muted("Skills:")} ${theme.accent(p.skills.join(", "))}`
         );
         if (p.cron) {
           console.log(

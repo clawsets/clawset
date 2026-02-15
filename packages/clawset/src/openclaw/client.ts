@@ -30,8 +30,12 @@ export async function setConfig(key: string, value: string): Promise<void> {
   await execa("openclaw", ["config", "set", key, value]);
 }
 
-export async function setSecret(key: string, value: string): Promise<void> {
-  await execa("openclaw", ["config", "set", `secrets.${key}`, value]);
+export async function runConfigure(sections: string[]): Promise<void> {
+  const args = ["configure"];
+  for (const section of sections) {
+    args.push("--section", section);
+  }
+  await execa("openclaw", args, { stdio: "inherit" });
 }
 
 export async function setupWorkspace(

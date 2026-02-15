@@ -12,14 +12,14 @@
     "description": {
       "type": "string"
     },
-    "requiredSkills": {
+    "skills": {
       "type": "array",
       "items": {
         "type": "string"
       },
       "minItems": 1
     },
-    "requiredSecrets": {
+    "configure": {
       "type": "array",
       "items": {
         "type": "string"
@@ -36,8 +36,7 @@
     "name",
     "version",
     "description",
-    "requiredSkills",
-    "requiredSecrets"
+    "skills"
   ],
   "additionalProperties": false,
   "$schema": "http://json-schema.org/draft-07/schema#"
