@@ -26,7 +26,7 @@ if [ -z "$PRESET" ]; then
   write_changelog \
     "All notable changes to this project will be documented in this file." \
     CHANGELOG.md \
-    --tag "v$VERSION"
+    --tag "v$VERSION" --exclude-path "**/CHANGELOG.md"
 else
   # Per-preset changelog, scoped to commits touching that preset dir
   if [ ! -d "presets/$PRESET" ]; then
@@ -37,5 +37,5 @@ else
   write_changelog \
     "All notable changes to this preset will be documented in this file." \
     "presets/$PRESET/CHANGELOG.md" \
-    --tag "v$VERSION-$PRESET" --tag-pattern "v[0-9]*-$PRESET" --include-path "presets/$PRESET/**"
+    --tag "v$VERSION-$PRESET" --tag-pattern "v[0-9]*-$PRESET" --include-path "presets/$PRESET/**" --exclude-path "**/CHANGELOG.md"
 fi
