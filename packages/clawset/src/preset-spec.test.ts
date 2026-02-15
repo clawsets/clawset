@@ -43,6 +43,10 @@ describe("preset specs", () => {
       expect(preset.requiredSkills.length).toBeGreaterThan(0);
     });
 
+    it("has a version matching semver format", () => {
+      expect(preset.version).toMatch(/^\d+\.\d+\.\d+$/);
+    });
+
     it("has a valid cron expression if set", () => {
       if (preset.cron) {
         const parts = preset.cron.split(" ");

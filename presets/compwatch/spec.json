@@ -1,6 +1,7 @@
 {
   "$schema": "https://clawsets.ai/schema.json",
   "name": "compwatch",
+  "version": "0.1.0",
   "description": "Competitive intelligence agent that tracks competitors, surfaces new features, and generates backlog ideas",
   "requiredSkills": ["github", "web-browse", "slack"],
   "requiredSecrets": ["GITHUB_TOKEN"],

@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const ClawPresetSchema = z.object({
   name: z.string().min(1),
+  version: z.string().regex(/^\d+\.\d+\.\d+$/),
   description: z.string(),
   requiredSkills: z.array(z.string()).min(1),
   requiredSecrets: z.array(z.string()),

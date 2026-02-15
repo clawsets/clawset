@@ -4,6 +4,7 @@ import { ClawPresetSchema } from "./types.js";
 describe("ClawPresetSchema", () => {
   const validPreset = {
     name: "autopm",
+    version: "0.1.0",
     description: "Autonomous project manager",
     requiredSkills: ["github", "slack"],
     requiredSecrets: ["GITHUB_TOKEN"],
@@ -16,9 +17,11 @@ describe("ClawPresetSchema", () => {
   });
 
   it("accepts a preset without cron (optional)", () => {
-    const { name, description, requiredSkills, requiredSecrets } = validPreset;
+    const { name, version, description, requiredSkills, requiredSecrets } =
+      validPreset;
     const result = ClawPresetSchema.safeParse({
       name,
+      version,
       description,
       requiredSkills,
       requiredSecrets,
@@ -50,5 +53,14 @@ describe("ClawPresetSchema", () => {
   it("rejects a preset missing required fields", () => {
     const result = ClawPresetSchema.safeParse({ name: "test" });
     expect(result.success).toBe(false);
+  });
+
+  it("rejects an invalid version format", () => {
+    expect(
+      ClawPresetSchema.safeParse({ ...validPreset, version: "v1" }).success
+    ).toBe(false);
+    expect(
+      ClawPresetSchema.safeParse({ ...validPreset, version: "1.0" }).success
+    ).toBe(false);
   });
 });

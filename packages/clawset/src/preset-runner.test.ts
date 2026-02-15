@@ -9,6 +9,7 @@ import {
 
 const testPreset: ClawPreset = {
   name: "autopm",
+  version: "1.0.0",
   description: "Autonomous project manager",
   requiredSkills: ["github", "slack"],
   requiredSecrets: ["GITHUB_TOKEN"],
@@ -17,6 +18,7 @@ const testPreset: ClawPreset = {
 
 const testPreset2: ClawPreset = {
   name: "devbot",
+  version: "1.0.0",
   description: "Developer assistant",
   requiredSkills: ["github"],
   requiredSecrets: [],
