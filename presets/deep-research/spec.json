@@ -1,0 +1,8 @@
+{
+  "$schema": "https://clawsets.ai/schema.json",
+  "name": "deep-research",
+  "version": "0.1.0",
+  "description": "Research powerhouse that searches the web, scrapes pages, summarizes long articles, and extracts key takeaways from any source",
+  "skills": ["summarize", "nano-pdf"],
+  "configure": ["web"]
+}
