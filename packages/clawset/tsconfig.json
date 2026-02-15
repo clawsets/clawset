@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "paths": {
+      "#presets/*": ["../../presets/*"]
+    }
+  },
+  "include": ["src", "../../presets"],
+  "exclude": ["node_modules", "dist"]
+}

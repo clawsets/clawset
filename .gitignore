@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+*.tsbuildinfo
+coverage
+.turbo
+.claude
+
+# Auto-generated preset registry
+packages/clawset/src/generated/
