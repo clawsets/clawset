@@ -84,7 +84,7 @@ export function createProgram(): Command {
   // --- install ---
   program
     .command("install <preset>")
-    .description("Install a preset (use the short name, e.g. autopm)")
+    .description("Install a preset (use the short name, e.g. issue-triage)")
     .option("--dry-run", "Show what would be done without making changes")
     .option("--name <agentName>", "Agent name (skips interactive prompt)")
     .action(

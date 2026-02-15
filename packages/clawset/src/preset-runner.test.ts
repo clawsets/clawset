@@ -8,7 +8,7 @@ import {
 } from "./preset-runner.js";
 
 const testPreset: ClawPreset = {
-  name: "autopm",
+  name: "issue-triage",
   version: "1.0.0",
   description: "Autonomous project manager",
   skills: ["github", "slack"],
@@ -30,9 +30,9 @@ describe("preset registry", () => {
   });
 
   it("registers and retrieves a preset by name", () => {
-    const found = getPreset("autopm");
+    const found = getPreset("issue-triage");
     expect(found).toBeDefined();
-    expect(found!.name).toBe("autopm");
+    expect(found!.name).toBe("issue-triage");
     expect(found!.description).toBe("Autonomous project manager");
   });
 
@@ -43,7 +43,7 @@ describe("preset registry", () => {
   it("lists all registered presets", () => {
     const all = listPresets();
     const names = all.map((p) => p.name);
-    expect(names).toContain("autopm");
+    expect(names).toContain("issue-triage");
     expect(names).toContain("devbot");
   });
 
@@ -53,13 +53,13 @@ describe("preset registry", () => {
       description: "Updated description",
     };
     registerPreset(updated);
-    expect(getPreset("autopm")!.description).toBe("Updated description");
+    expect(getPreset("issue-triage")!.description).toBe("Updated description");
   });
 });
 
 describe("qualifiedName", () => {
   it("prepends clawset- prefix to preset name", () => {
-    expect(qualifiedName(testPreset)).toBe("clawset-autopm");
+    expect(qualifiedName(testPreset)).toBe("clawset-issue-triage");
   });
 
   it("works for presets without cron", () => {

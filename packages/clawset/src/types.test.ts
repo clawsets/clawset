@@ -3,7 +3,7 @@ import { ClawPresetSchema } from "./types.js";
 
 describe("ClawPresetSchema", () => {
   const validPreset = {
-    name: "autopm",
+    name: "issue-triage",
     version: "0.1.0",
     description: "Autonomous project manager",
     skills: ["github", "slack"],

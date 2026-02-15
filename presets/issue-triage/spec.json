@@ -1,6 +1,6 @@
 {
   "$schema": "https://clawsets.ai/schema.json",
-  "name": "autopm",
+  "name": "issue-triage",
   "version": "0.1.0",
   "description": "Autonomous project manager that triages issues, assigns tasks, and generates standups",
   "skills": ["github", "slack"],

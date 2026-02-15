@@ -6,9 +6,9 @@ import { agentWorkspacePath } from "./client.js";
 
 describe("agentWorkspacePath", () => {
   it("returns path under ~/.openclaw with workspace- prefix", () => {
-    const result = agentWorkspacePath("clawset-autopm");
+    const result = agentWorkspacePath("clawset-issue-triage");
     expect(result).toBe(
-      path.join(os.homedir(), ".openclaw", "workspace-clawset-autopm")
+      path.join(os.homedir(), ".openclaw", "workspace-clawset-issue-triage")
     );
   });
 

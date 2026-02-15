@@ -15,4 +15,4 @@ All notable changes to this preset will be documented in this file.
 
 ### Miscellaneous
 
-- Package structure and compwatch
+- Package structure and competitor-radar
