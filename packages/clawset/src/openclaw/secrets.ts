@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import * as openclaw from "./openclaw.js";
+import * as openclaw from "./client.js";
 
 export function validateSecretFormat(secretName: string, value: string): void {
   if (secretName.includes("OPENAI") && !value.startsWith("sk-")) {

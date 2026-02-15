@@ -2,7 +2,7 @@ import path from "node:path";
 import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { Command } from "commander";
-import { theme } from "./utils/theme.js";
+import { theme } from "./ui/theme.js";
 import {
   getPreset,
   qualifiedName,
@@ -10,13 +10,11 @@ import {
   runPreset,
   upgradePreset,
 } from "./preset-runner.js";
-import * as openclaw from "./utils/openclaw.js";
-import { removeSchedule } from "./utils/scheduler.js";
-import {
-  promptAgentName,
-  confirmUpgrade,
-  confirmDelete,
-} from "./utils/prompt.js";
+import * as openclaw from "./openclaw/client.js";
+import { removeSchedule } from "./openclaw/scheduler.js";
+import { promptAgentName, confirmUpgrade, confirmDelete } from "./ui/prompt.js";
+
+import pkg from "../package.json" with { type: "json" };
 
 // Side-effect import: auto-discovers and registers all presets at build time
 import "./generated/preset-registry.js";
@@ -27,7 +25,7 @@ function resolveTemplateDir(folderName: string): string {
   return path.resolve(__dirname, "presets", folderName);
 }
 
-const VERSION = "0.1.0";
+const VERSION = pkg.version;
 
 function bannerLine(): string {
   const title = "\uD83E\uDD9E\uD83D\uDEE0\uFE0F clawset";
@@ -46,7 +44,7 @@ function themeHelp(raw: string): string {
     .replace(/^(Commands:)$/m, (_m, label) => theme.heading(label))
     .replace(/^(Options:)$/m, (_m, label) => theme.heading(label))
     .replace(
-      /^(  )(\S.+?)( {2,})(.+)$/gm,
+      /^( {2})(\S.+?)( {2,})(.+)$/gm,
       (_m, indent, term, gap, desc) =>
         `${indent}${theme.command(term)}${gap}${theme.muted(desc)}`
     )

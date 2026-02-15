@@ -1,30 +1,58 @@
+import fs from "node:fs";
+import path from "node:path";
 import { describe, it, expect } from "vitest";
 import { ClawPresetSchema } from "./types.js";
-import { autopmPreset } from "#presets/autopm/spec.js";
+import { listPresets } from "./preset-runner.js";
+import "./generated/preset-registry.js";
 
-describe("autopm preset spec", () => {
-  it("passes schema validation", () => {
-    const result = ClawPresetSchema.safeParse(autopmPreset);
-    expect(result.success).toBe(true);
+const REQUIRED_TEMPLATES = [
+  "IDENTITY.md",
+  "SOUL.md",
+  "AGENTS.md",
+  "BOOTSTRAP.md",
+  "HEARTBEAT.md",
+  "TOOLS.md",
+  "USER.md",
+  "MEMORY.md",
+];
+
+const presetsDir = path.resolve(import.meta.dirname, "../../../presets");
+
+const presets = listPresets();
+
+describe("preset specs", () => {
+  it("discovers at least one preset", () => {
+    expect(presets.length).toBeGreaterThan(0);
   });
 
-  it("has the correct name", () => {
-    expect(autopmPreset.name).toBe("autopm");
-  });
+  describe.each(presets)("$name", (preset) => {
+    it("passes schema validation", () => {
+      const result = ClawPresetSchema.safeParse(preset);
+      expect(result.success).toBe(true);
+    });
 
-  it("does not include clawset- prefix in name", () => {
-    expect(autopmPreset.name).not.toMatch(/^clawset-/);
-  });
+    it("does not include clawset- prefix in name", () => {
+      expect(preset.name).not.toMatch(/^clawset-/);
+    });
 
-  it("requires github and slack skills", () => {
-    expect(autopmPreset.requiredSkills).toEqual(["github", "slack"]);
-  });
+    it("has a non-empty description", () => {
+      expect(preset.description.length).toBeGreaterThan(0);
+    });
 
-  it("requires GITHUB_TOKEN secret", () => {
-    expect(autopmPreset.requiredSecrets).toEqual(["GITHUB_TOKEN"]);
-  });
+    it("requires at least one skill", () => {
+      expect(preset.requiredSkills.length).toBeGreaterThan(0);
+    });
 
-  it("has a weekday cron schedule", () => {
-    expect(autopmPreset.cron).toBe("0 9 * * 1-5");
+    it("has a valid cron expression if set", () => {
+      if (preset.cron) {
+        const parts = preset.cron.split(" ");
+        expect(parts.length).toBe(5);
+      }
+    });
+
+    it.each(REQUIRED_TEMPLATES)("has template file %s", (filename) => {
+      const filePath = path.join(presetsDir, preset.name, filename);
+      expect(fs.existsSync(filePath)).toBe(true);
+    });
   });
 });

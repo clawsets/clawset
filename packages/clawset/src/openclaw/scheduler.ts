@@ -1,6 +1,6 @@
 import { execa } from "execa";
-import { theme } from "./theme.js";
-import * as openclaw from "./openclaw.js";
+import { theme } from "../ui/theme.js";
+import * as openclaw from "./client.js";
 
 const CRONTAB_MARKER = "# clawset-managed";
 

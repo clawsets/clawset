@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import os from "node:os";
 import path from "node:path";
 import fs from "node:fs/promises";
-import { agentWorkspacePath, setupWorkspace } from "./openclaw.js";
+import { agentWorkspacePath, setupWorkspace } from "./client.js";
 
 describe("agentWorkspacePath", () => {
   it("returns path under ~/.openclaw with workspace- prefix", () => {

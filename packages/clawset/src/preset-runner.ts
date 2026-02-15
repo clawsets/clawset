@@ -1,11 +1,11 @@
 import type { ClawPreset, StepResult } from "./types.js";
-import { theme } from "./utils/theme.js";
-import { validateAll } from "./utils/validator.js";
-import * as openclaw from "./utils/openclaw.js";
-import { checkSkills } from "./utils/skills.js";
-import { setSecrets } from "./utils/secrets.js";
-import { removeSchedule, setupSchedule } from "./utils/scheduler.js";
-import { confirmLaunch } from "./utils/prompt.js";
+import { theme } from "./ui/theme.js";
+import { validateAll } from "./openclaw/validator.js";
+import * as openclaw from "./openclaw/client.js";
+import { checkSkills } from "./openclaw/skills.js";
+import { setSecrets } from "./openclaw/secrets.js";
+import { removeSchedule, setupSchedule } from "./openclaw/scheduler.js";
+import { confirmLaunch } from "./ui/prompt.js";
 
 const START_MESSAGE =
   "Hey! I just came online. Walk me through the initial setup — let's get started.";
