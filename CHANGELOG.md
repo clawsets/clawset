@@ -20,3 +20,4 @@ All notable changes to this project will be documented in this file.
 - Readme
 - Ci and tests
 - Package structure and compwatch
+- Changelog

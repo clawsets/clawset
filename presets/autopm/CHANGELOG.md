@@ -13,3 +13,7 @@ All notable changes to this preset will be documented in this file.
 ### Features
 
 - Spec version
+
+### Miscellaneous
+
+- Changelog

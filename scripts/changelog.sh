@@ -37,5 +37,5 @@ else
   write_changelog \
     "All notable changes to this preset will be documented in this file." \
     "presets/$PRESET/CHANGELOG.md" \
-    --tag "v$VERSION" --include-path "presets/$PRESET/**"
+    --tag "v$VERSION-$PRESET" --tag-pattern "v[0-9]*-$PRESET" --include-path "presets/$PRESET/**"
 fi

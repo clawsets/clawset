@@ -80,26 +80,33 @@ export const mypresetPreset: ClawPreset = {
 
 Each preset is versioned independently via the `version` field in its `spec.json`. Changelogs are generated with [git-cliff](https://git-cliff.org), scoped to commits that touch the preset's directory.
 
-**Workflow after changing a preset:**
+Tags follow the convention `v<version>-<preset>` (e.g. `v0.1.0-autopm`). git-cliff uses these tags to determine version boundaries — without them, all commits appear under a single version.
 
-1. Commit your change with a [conventional commit](https://www.conventionalcommits.org) message:
+**Workflow for releasing a preset:**
+
+1. Tag the current release before making changes:
+   ```bash
+   git tag v0.1.0-autopm
+   ```
+
+2. Commit your changes with [conventional commit](https://www.conventionalcommits.org) messages:
    ```bash
    git add presets/autopm/AGENTS.md
    git commit -m "docs: update agent instructions for autopm"
    ```
 
-2. Bump the version in `presets/<preset>/spec.json` (`patch`, `minor`, or `major` as appropriate):
+3. Bump the version in `presets/<preset>/spec.json` (`patch`, `minor`, or `major` as appropriate):
    ```bash
    git add presets/autopm/spec.json
-   git commit -m "chore: bump autopm to 0.1.1"
+   git commit -m "chore: bump autopm to 0.2.0"
    ```
 
-3. Generate the changelog:
+4. Generate the changelog:
    ```bash
    pnpm changelog autopm
    ```
 
-4. Commit the updated changelog:
+5. Commit the updated changelog:
    ```bash
    git add presets/autopm/CHANGELOG.md
    git commit -m "docs: update autopm changelog"
