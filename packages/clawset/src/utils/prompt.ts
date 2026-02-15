@@ -27,6 +27,20 @@ export async function confirmUpgrade(agentName: string): Promise<boolean> {
   }
 }
 
+export async function confirmLaunch(): Promise<boolean> {
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  try {
+    const answer = await rl.question(
+      theme.accent("  Start chatting with your agent now? ") +
+        theme.muted("[Y/n]: ")
+    );
+    const input = answer.trim().toLowerCase();
+    return input === "" || input === "y";
+  } finally {
+    rl.close();
+  }
+}
+
 export async function confirmDelete(agentName: string): Promise<boolean> {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
   try {

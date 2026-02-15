@@ -89,6 +89,18 @@ export async function removeCronJob(name: string): Promise<void> {
   await execa("openclaw", ["cron", "rm", name]);
 }
 
+export async function launchTui(
+  agentName: string,
+  message: string
+): Promise<void> {
+  const sessionKey = `agent:${agentName}:main`;
+  await execa(
+    "openclaw",
+    ["tui", "--session", sessionKey, "--message", message],
+    { stdio: "inherit" }
+  );
+}
+
 export async function selectModel(): Promise<void> {
   await execa("openclaw", ["configure", "--section", "model"], {
     stdio: "inherit",

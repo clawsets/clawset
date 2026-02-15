@@ -5,6 +5,10 @@ import * as openclaw from "./utils/openclaw.js";
 import { checkSkills } from "./utils/skills.js";
 import { setSecrets } from "./utils/secrets.js";
 import { removeSchedule, setupSchedule } from "./utils/scheduler.js";
+import { confirmLaunch } from "./utils/prompt.js";
+
+const START_MESSAGE =
+  "Hey! I just came online. Walk me through the initial setup — let's get started.";
 
 const PRESET_PREFIX = "clawset-";
 
@@ -109,6 +113,7 @@ export async function runPreset(
   }
 
   printSummary(preset, agentName, results);
+  await promptAndLaunch(agentName);
 }
 
 export async function upgradePreset(
@@ -194,6 +199,19 @@ export async function upgradePreset(
     console.log(theme.muted(`  Scheduled: ${preset.cron}`));
   }
   console.log();
+  await promptAndLaunch(agentName);
+}
+
+async function promptAndLaunch(agentName: string): Promise<void> {
+  const shouldLaunch = await confirmLaunch();
+  if (!shouldLaunch) return;
+
+  console.log(theme.muted("\n  Launching TUI...\n"));
+  try {
+    await openclaw.launchTui(agentName, START_MESSAGE);
+  } catch {
+    // User exited TUI or it failed to connect — not a fatal error
+  }
 }
 
 function printSummary(
