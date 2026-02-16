@@ -2,8 +2,11 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { createProgram } from "./cli.js";
 import pkg from "../package.json" with { type: "json" };
 
-// Mock the generated registry to avoid side-effect imports
-vi.mock("./generated/preset-registry.js", () => ({}));
+// Mock registry to avoid network calls
+vi.mock("./registry.js", () => ({
+  fetchPresetManifest: vi.fn(),
+  listAvailablePresets: vi.fn(() => []),
+}));
 
 // Mock openclaw to avoid shelling out
 vi.mock("./openclaw/client.js", () => ({

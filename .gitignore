@@ -5,6 +5,11 @@ dist
 coverage
 .turbo
 .claude
+.DS_Store
 
 # Auto-generated preset registry
 packages/clawset/src/generated/
+
+# Next.js
+.next
+out

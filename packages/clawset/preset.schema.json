@@ -1,17 +1,6 @@
 {
   "type": "object",
   "properties": {
-    "name": {
-      "type": "string",
-      "minLength": 1
-    },
-    "version": {
-      "type": "string",
-      "pattern": "^\\d+\\.\\d+\\.\\d+$"
-    },
-    "description": {
-      "type": "string"
-    },
     "skills": {
       "type": "array",
       "items": {
@@ -33,9 +22,6 @@
     }
   },
   "required": [
-    "name",
-    "version",
-    "description",
     "skills"
   ],
   "additionalProperties": false,

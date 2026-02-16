@@ -5,35 +5,21 @@ import * as openclaw from "./openclaw/client.js";
 import { checkSkills } from "./openclaw/skills.js";
 import { removeSchedule, setupSchedule } from "./openclaw/scheduler.js";
 import { confirmConfigure, confirmLaunch } from "./ui/prompt.js";
+import { fetchPresetFiles } from "./registry.js";
 
 const START_MESSAGE =
   "Hey! I just came online. Walk me through the initial setup — let's get started.";
 
 const PRESET_PREFIX = "clawset-";
 
-const presets: Record<string, ClawPreset> = {};
-
-export function registerPreset(preset: ClawPreset): void {
-  presets[preset.name] = preset;
-}
-
-export function getPreset(name: string): ClawPreset | undefined {
-  return presets[name];
-}
-
 /** Returns the fully-qualified name with `clawset-` prefix. */
 export function qualifiedName(preset: ClawPreset): string {
   return `${PRESET_PREFIX}${preset.name}`;
 }
 
-export function listPresets(): ClawPreset[] {
-  return Object.values(presets);
-}
-
 export async function runPreset(
   preset: ClawPreset,
-  agentName: string,
-  resolveTemplateDir: (folderName: string) => string
+  agentName: string
 ): Promise<void> {
   console.log(
     theme.heading(`\n  Installing preset: `) +
@@ -56,7 +42,7 @@ export async function runPreset(
     {
       label: "Setting up workspace",
       fn: async () => {
-        const templateDir = resolveTemplateDir(preset.name);
+        const templateDir = await fetchPresetFiles(preset.name);
         await openclaw.setupWorkspace(agentName, templateDir);
       },
     },
@@ -148,8 +134,7 @@ export async function runPreset(
 
 export async function upgradePreset(
   preset: ClawPreset,
-  agentName: string,
-  resolveTemplateDir: (folderName: string) => string
+  agentName: string
 ): Promise<void> {
   console.log(
     theme.heading(`\n  Upgrading preset: `) +
@@ -164,7 +149,7 @@ export async function upgradePreset(
     {
       label: "Updating workspace files",
       fn: async () => {
-        const templateDir = resolveTemplateDir(preset.name);
+        const templateDir = await fetchPresetFiles(preset.name);
         await openclaw.setupWorkspace(agentName, templateDir);
       },
     },

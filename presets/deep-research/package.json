@@ -1,0 +1,16 @@
+{
+  "name": "@clawset/deep-research",
+  "version": "0.1.0",
+  "description": "Research powerhouse that searches the web, scrapes pages, summarizes long articles, and extracts key takeaways from any source",
+  "license": "MIT",
+  "author": "Afshin Mehrabani",
+  "homepage": "https://clawsets.ai/deep-research",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clawsets/clawset",
+    "directory": "presets/deep-research"
+  },
+  "keywords": ["openclaw", "clawset", "preset"],
+  "files": ["src/**", "README.md", "CHANGELOG.md"],
+  "publishConfig": { "access": "public" }
+}

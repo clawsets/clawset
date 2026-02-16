@@ -1,0 +1,6 @@
+{
+  "$schema": "https://clawsets.ai/schema.json",
+  "skills": ["github", "slack"],
+  "configure": ["web"],
+  "cron": "0 9 * * 1-5"
+}

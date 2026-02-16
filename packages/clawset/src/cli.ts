@@ -1,29 +1,13 @@
-import path from "node:path";
 import fs from "node:fs/promises";
-import { fileURLToPath } from "node:url";
 import { Command } from "commander";
 import { theme } from "./ui/theme.js";
-import {
-  getPreset,
-  qualifiedName,
-  listPresets,
-  runPreset,
-  upgradePreset,
-} from "./preset-runner.js";
+import { qualifiedName, runPreset, upgradePreset } from "./preset-runner.js";
+import { fetchPresetManifest, listAvailablePresets } from "./registry.js";
 import * as openclaw from "./openclaw/client.js";
 import { removeSchedule } from "./openclaw/scheduler.js";
 import { promptAgentName, confirmUpgrade, confirmDelete } from "./ui/prompt.js";
 
 import pkg from "../package.json" with { type: "json" };
-
-// Side-effect import: auto-discovers and registers all presets at build time
-import "./generated/preset-registry.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-function resolveTemplateDir(folderName: string): string {
-  return path.resolve(__dirname, "presets", folderName);
-}
 
 const VERSION = pkg.version;
 
@@ -92,8 +76,10 @@ export function createProgram(): Command {
         presetArg: string,
         options: { dryRun?: boolean; name?: string }
       ) => {
-        const preset = getPreset(presetArg);
-        if (!preset) {
+        let preset;
+        try {
+          preset = await fetchPresetManifest(presetArg);
+        } catch {
           console.error(
             theme.error(`Unknown preset: "${presetArg}"\n`) +
               theme.muted('Run "clawset list" to see available presets.')
@@ -115,7 +101,7 @@ export function createProgram(): Command {
             `  ${theme.muted("Agent name:")}  ${theme.info(agentName)}`
           );
           console.log(
-            `  ${theme.muted("Template:")}    ${theme.muted(resolveTemplateDir(preset.name))}`
+            `  ${theme.muted("Package:")}     ${theme.muted(`@clawset/${preset.name}`)}`
           );
           console.log(
             `  ${theme.muted("Skills:")}      ${theme.accent(preset.skills.join(", "))}`
@@ -145,11 +131,11 @@ export function createProgram(): Command {
             console.log(theme.muted("\n  Cancelled.\n"));
             return;
           }
-          await upgradePreset(preset, agentName, resolveTemplateDir);
+          await upgradePreset(preset, agentName);
           return;
         }
 
-        await runPreset(preset, agentName, resolveTemplateDir);
+        await runPreset(preset, agentName);
       }
     );
 
@@ -158,7 +144,7 @@ export function createProgram(): Command {
     .command("list")
     .description("List all available presets")
     .action(async () => {
-      const presets = listPresets();
+      const presets = await listAvailablePresets();
       console.log(theme.heading("  Available presets\n"));
       for (const p of presets) {
         const qName = qualifiedName(p);

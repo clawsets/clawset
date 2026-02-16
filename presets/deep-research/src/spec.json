@@ -1,0 +1,5 @@
+{
+  "$schema": "https://clawsets.ai/schema.json",
+  "skills": ["summarize", "nano-pdf"],
+  "configure": ["web"]
+}

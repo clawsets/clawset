@@ -1,0 +1,16 @@
+{
+  "name": "@clawset/competitor-radar",
+  "version": "0.1.0",
+  "description": "Competitive intelligence agent that tracks competitors, surfaces new features, and generates backlog ideas",
+  "license": "MIT",
+  "author": "Afshin Mehrabani",
+  "homepage": "https://clawsets.ai/competitor-radar",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clawsets/clawset",
+    "directory": "presets/competitor-radar"
+  },
+  "keywords": ["openclaw", "clawset", "preset"],
+  "files": ["src/**", "README.md", "CHANGELOG.md"],
+  "publishConfig": { "access": "public" }
+}

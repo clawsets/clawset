@@ -16,7 +16,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsx scripts/generate-preset-schema.ts && tsx scripts/generate-preset-registry.ts && tsup && tsx scripts/copy-presets.ts",
+    "build": "tsx scripts/generate-preset-schema.ts && tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
@@ -50,6 +50,7 @@
     "dotenv": "^16.4.0",
     "clawhub": "^0.6.1",
     "execa": "^9.5.0",
+    "pacote": "^21.0.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {

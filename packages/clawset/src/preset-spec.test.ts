@@ -1,9 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, it, expect } from "vitest";
-import { ClawPresetSchema } from "./types.js";
-import { listPresets } from "./preset-runner.js";
-import "./generated/preset-registry.js";
+import { ClawPresetSchema, ClawPresetConfigSchema } from "./types.js";
 
 const REQUIRED_TEMPLATES = [
   "IDENTITY.md",
@@ -18,7 +16,34 @@ const REQUIRED_TEMPLATES = [
 
 const presetsDir = path.resolve(import.meta.dirname, "../../../presets");
 
-const presets = listPresets();
+// Read presets from package.json (npm metadata) + spec.json (clawset config)
+function loadPresets() {
+  const entries = fs.readdirSync(presetsDir, { withFileTypes: true });
+  return entries
+    .filter(
+      (e) =>
+        e.isDirectory() &&
+        fs.existsSync(path.join(presetsDir, e.name, "package.json")) &&
+        fs.existsSync(path.join(presetsDir, e.name, "src", "spec.json"))
+    )
+    .map((e) => {
+      const pkgPath = path.join(presetsDir, e.name, "package.json");
+      const specPath = path.join(presetsDir, e.name, "src", "spec.json");
+      const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+      const spec = JSON.parse(fs.readFileSync(specPath, "utf-8"));
+      const shortName = (pkg.name as string).replace("@clawset/", "");
+      return {
+        name: shortName,
+        version: pkg.version,
+        description: pkg.description,
+        skills: spec.skills,
+        configure: spec.configure,
+        cron: spec.cron,
+      };
+    });
+}
+
+const presets = loadPresets();
 
 describe("preset specs", () => {
   it("discovers at least one preset", () => {
@@ -28,6 +53,13 @@ describe("preset specs", () => {
   describe.each(presets)("$name", (preset) => {
     it("passes schema validation", () => {
       const result = ClawPresetSchema.safeParse(preset);
+      expect(result.success).toBe(true);
+    });
+
+    it("passes config schema validation", () => {
+      const specPath = path.join(presetsDir, preset.name, "src", "spec.json");
+      const spec = JSON.parse(fs.readFileSync(specPath, "utf-8"));
+      const result = ClawPresetConfigSchema.safeParse(spec);
       expect(result.success).toBe(true);
     });
 
@@ -54,8 +86,8 @@ describe("preset specs", () => {
       }
     });
 
-    it.each(REQUIRED_TEMPLATES)("has template file %s", (filename) => {
-      const filePath = path.join(presetsDir, preset.name, filename);
+    it.each(REQUIRED_TEMPLATES)("has template file src/%s", (filename) => {
+      const filePath = path.join(presetsDir, preset.name, "src", filename);
       expect(fs.existsSync(filePath)).toBe(true);
     });
   });

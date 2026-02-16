@@ -1,9 +1,0 @@
-{
-  "$schema": "https://clawsets.ai/schema.json",
-  "name": "competitor-radar",
-  "version": "0.1.0",
-  "description": "Competitive intelligence agent that tracks competitors, surfaces new features, and generates backlog ideas",
-  "skills": ["github", "slack"],
-  "configure": ["web"],
-  "cron": "0 9 * * 1-5"
-}

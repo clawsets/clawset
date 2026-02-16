@@ -5,6 +5,11 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "website#build": {
+      "dependsOn": [],
+      "outputs": [".next/**", "out/**"],
+      "inputs": ["src/**", "../../presets/**"]
+    },
     "test": {
       "dependsOn": ["build"],
       "cache": false
