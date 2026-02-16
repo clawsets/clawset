@@ -14,5 +14,5 @@ Runs on weekdays at 9 AM (`0 9 * * 1-5`).
 ## Install
 
 ```bash
-clawset install competitor-radar
+clawset competitor-radar
 ```

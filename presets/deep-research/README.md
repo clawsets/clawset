@@ -10,5 +10,5 @@ Research powerhouse that searches the web, scrapes pages, summarizes long articl
 ## Install
 
 ```bash
-clawset install deep-research
+clawset deep-research
 ```

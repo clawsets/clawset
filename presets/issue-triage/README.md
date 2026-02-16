@@ -14,5 +14,5 @@ Runs on weekdays at 9 AM (`0 9 * * 1-5`).
 ## Install
 
 ```bash
-clawset install issue-triage
+clawset issue-triage
 ```
