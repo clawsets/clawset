@@ -1,15 +1,13 @@
-# Changelog
+# @clawset/issue-triage
 
-All notable changes to this preset will be documented in this file.
+## 0.1.1
 
+### Patch Changes
 
-## [0.1.0] - 2026-02-15
+- Initial release
 
-### Bug Fixes
+## 0.1.0
 
-- Clawset upgrade
-- Zod to json schema
+### Minor Changes
 
-### Features
-
-- Spec version
+- Initial release of issue-triage preset

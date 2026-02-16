@@ -1,10 +1,13 @@
-# Changelog
+# @clawset/deep-research
 
-All notable changes to this preset will be documented in this file.
+## 0.1.1
 
+### Patch Changes
 
-## [0.1.0] - 2026-02-15
+- Initial release
 
-### Features
+## 0.1.0
+
+### Minor Changes
 
 - Initial release of deep-research preset

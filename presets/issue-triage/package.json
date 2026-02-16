@@ -1,6 +1,6 @@
 {
   "name": "@clawset/issue-triage",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Autonomous project manager that triages issues, assigns tasks, and generates standups",
   "license": "MIT",
   "author": "Afshin Mehrabani",
@@ -10,7 +10,17 @@
     "url": "https://github.com/clawsets/clawset",
     "directory": "presets/issue-triage"
   },
-  "keywords": ["openclaw", "clawset", "preset"],
-  "files": ["src/**", "README.md", "CHANGELOG.md"],
-  "publishConfig": { "access": "public" }
+  "keywords": [
+    "openclaw",
+    "clawset",
+    "preset"
+  ],
+  "files": [
+    "src/**",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

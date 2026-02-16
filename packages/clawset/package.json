@@ -1,6 +1,6 @@
 {
   "name": "clawset",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Install and configure OpenClaw presets with a single command",
   "type": "module",
   "bin": {
