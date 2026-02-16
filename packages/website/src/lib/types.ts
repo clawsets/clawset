@@ -5,7 +5,7 @@ export interface PresetData {
   skills: string[];
   configure?: string[];
   cron?: string;
-  soulMd: string;
+  docs: Record<string, string>;
   identityEmoji: string;
   downloads: number;
 }

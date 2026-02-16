@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Light mode (default) */
 :root {
   --th-muted: #78716c;
@@ -122,3 +124,8 @@ body {
   color: var(--color-muted);
   margin-bottom: 1em;
 }
+
+[data-slot="tabs-trigger"] {
+  cursor: pointer;
+}
+

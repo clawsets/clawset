@@ -3,6 +3,7 @@ import { Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { cronToHuman } from "@/lib/cron";
+import { prettyName } from "@/lib/utils";
 import type { PresetData } from "@/lib/types";
 
 function formatDownloads(count: number): string {
@@ -20,7 +21,7 @@ export function PresetCard({ preset }: { preset: PresetData }) {
             <span className="shrink-0 text-2xl">{preset.identityEmoji}</span>
             <div className="relative min-w-0 flex-1 overflow-hidden">
               <CardTitle className="whitespace-nowrap">
-                {preset.name}
+                {prettyName(preset.name)}
               </CardTitle>
               <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-surface to-transparent" />
             </div>

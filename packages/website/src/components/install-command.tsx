@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { Copy, Check } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-export function InstallCommand({ command }: { command: string }) {
+function CommandBlock({ command }: { command: string }) {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -30,5 +31,29 @@ export function InstallCommand({ command }: { command: string }) {
         )}
       </button>
     </div>
+  );
+}
+
+export function InstallCommand({ command }: { command: string }) {
+  const args = command.replace(/^npx /, "");
+  const commands = {
+    npm: `npx ${args}`,
+    pnpm: `pnpm dlx ${args}`,
+    bun: `bunx ${args}`,
+  };
+
+  return (
+    <Tabs defaultValue="npm">
+      <TabsList>
+        <TabsTrigger value="npm">npm</TabsTrigger>
+        <TabsTrigger value="pnpm">pnpm</TabsTrigger>
+        <TabsTrigger value="bun">bun</TabsTrigger>
+      </TabsList>
+      {Object.entries(commands).map(([key, cmd]) => (
+        <TabsContent key={key} value={key}>
+          <CommandBlock command={cmd} />
+        </TabsContent>
+      ))}
+    </Tabs>
   );
 }

@@ -4,8 +4,10 @@ import { getAllPresetNames, getPresetByName } from "@/lib/presets";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { InstallCommand } from "@/components/install-command";
-import { MarkdownContent } from "@/components/markdown-content";
+import { PresetDocs } from "@/components/preset-docs";
 import { cronToHuman } from "@/lib/cron";
+import { prettyName } from "@/lib/utils";
+import { Download } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -15,7 +17,7 @@ export async function generateMetadata({
   const { preset: name } = await params;
   const preset = await getPresetByName(name);
   return {
-    title: preset ? `Clawsets | ${preset.name}` : "Clawsets",
+    title: preset ? `Clawsets | ${prettyName(preset.name)}` : "Clawsets",
     description: preset?.description,
   };
 }
@@ -43,9 +45,13 @@ export default async function PresetPage({
     <div>
       <div className="mb-8">
         <div className="mb-4 flex items-center gap-3">
-          <span className="text-4xl">{preset.identityEmoji}</span>
-          <h1 className="text-3xl font-bold">{preset.name}</h1>
+          <span className="shrink-0 text-4xl">{preset.identityEmoji}</span>
+          <h1 className="min-w-0 truncate text-3xl font-bold">{prettyName(preset.name)}</h1>
           <Badge variant="outline">v{preset.version}</Badge>
+          <div className="ml-auto flex shrink-0 items-center gap-1 text-sm text-muted">
+            <Download size={16} />
+            <span>{preset.downloads.toLocaleString()} / week</span>
+          </div>
         </div>
         <p className="text-lg text-muted">{preset.description}</p>
       </div>
@@ -90,13 +96,6 @@ export default async function PresetPage({
             </p>
           </div>
         )}
-
-        <div>
-          <h2 className="mb-2 text-sm font-medium text-muted uppercase tracking-wider">
-            Weekly Downloads
-          </h2>
-          <p className="text-sm">{preset.downloads.toLocaleString()}</p>
-        </div>
       </div>
 
       <div className="mb-8">
@@ -106,16 +105,7 @@ export default async function PresetPage({
         <InstallCommand command={`npx clawset ${preset.name}`} />
       </div>
 
-      {preset.soulMd && (
-        <div className="mb-8">
-          <h2 className="mb-3 text-sm font-medium text-muted uppercase tracking-wider">
-            About
-          </h2>
-          <div className="rounded-xl border border-border bg-surface p-6">
-            <MarkdownContent content={preset.soulMd} />
-          </div>
-        </div>
-      )}
+      <PresetDocs docs={preset.docs} />
 
       <div className="flex gap-3">
         <a href={reportUrl} target="_blank" rel="noopener noreferrer">
