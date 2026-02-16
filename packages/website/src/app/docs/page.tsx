@@ -43,15 +43,8 @@ export default function DocsPage() {
         <h2 className="mb-4 text-xl font-semibold text-accent">How to Use</h2>
         <div className="space-y-4">
           <p className="text-muted">
-            Install the CLI globally, then use it to install any preset into
-            your project.
+            Use npx to install any preset into your project. No global install needed.
           </p>
-          <div className="space-y-3">
-            <h3 className="text-sm font-medium text-muted uppercase tracking-wider">
-              Install the CLI
-            </h3>
-            <InstallCommand command="npm i -g clawset" />
-          </div>
           <div className="space-y-3">
             <h3 className="text-sm font-medium text-muted uppercase tracking-wider">
               Install a preset
