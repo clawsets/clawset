@@ -69,7 +69,7 @@ export async function fetchPresetFiles(name: string): Promise<string> {
  */
 export async function listAvailablePresets(): Promise<ClawPreset[]> {
   const url =
-    "https://registry.npmjs.org/-/v1/search?text=scope:clawset+keywords:preset&size=100";
+    "https://registry.npmjs.org/-/v1/search?text=%40clawset%2F&size=100";
 
   const res = await fetch(url);
   if (!res.ok) {
@@ -92,6 +92,7 @@ export async function listAvailablePresets(): Promise<ClawPreset[]> {
 
   for (const obj of data.objects) {
     const pkg = obj.package;
+    if (!pkg.name.startsWith(`${SCOPE}/`)) continue;
     try {
       const preset = await fetchPresetManifest(pkg.name);
       presets.push(preset);
