@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { InstallCommand } from "@/components/install-command";
+import { FAQJsonLd } from "next-seo";
 
 export const metadata: Metadata = {
   title: "Docs | Clawsets",
@@ -9,6 +10,30 @@ export const metadata: Metadata = {
 export default function DocsPage() {
   return (
     <div className="space-y-16">
+      <FAQJsonLd
+        questions={[
+          {
+            question: "What is OpenClaw?",
+            answer:
+              "OpenClaw is an open-source framework for building autonomous AI agents. It provides a structured way to define agent identity, behavior, tools, and schedules using simple markdown and JSON files.",
+          },
+          {
+            question: "What are skills?",
+            answer:
+              "Skills are capabilities that a preset uses, like github, slack, or summarize. Each skill maps to a set of tools the agent can use during execution.",
+          },
+          {
+            question: "How do schedules work?",
+            answer:
+              "Presets can define a cron field in their spec.json to run on a schedule. For example, 0 9 * * 1-5 means the agent runs at 9:00 AM on weekdays. The scheduler is managed by the OpenClaw runtime.",
+          },
+          {
+            question: "What is configure?",
+            answer:
+              "The configure field lists setup steps that run when installing a preset. For example, a preset with configure: [\"web\"] will prompt you to configure web access during installation.",
+          },
+        ]}
+      />
       <section>
         <h1 className="mb-8 text-3xl font-bold">Documentation</h1>
       </section>

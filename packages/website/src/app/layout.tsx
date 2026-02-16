@@ -6,9 +6,15 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://clawsets.ai"),
   title: "Clawsets | Presets that give your lobster superpowers",
-  description:
-    "Presets that give your lobster superpowers",
+  description: "Presets that give your lobster superpowers",
+  openGraph: {
+    type: "website",
+    siteName: "Clawsets",
+    title: "Clawsets | Presets that give your lobster superpowers",
+    description: "Presets that give your lobster superpowers",
+  },
 };
 
 const themeScript = `

@@ -16,6 +16,7 @@ import {
   BadgeCheck,
   BadgeAlert,
 } from "lucide-react";
+import { SoftwareApplicationJsonLd } from "next-seo";
 
 export async function generateStaticParams() {
   const presets = await getAllPresets();
@@ -133,6 +134,13 @@ export default async function SkillPage({
 
   return (
     <div>
+      <SoftwareApplicationJsonLd
+        name={skill.displayName}
+        description={skill.summary ?? `${skill.displayName} skill for OpenClaw`}
+        applicationCategory="DeveloperApplication"
+        operatingSystem="Any"
+        offers={{ price: 0, priceCurrency: "USD" }}
+      />
       <div className="mb-8">
         <div className="mb-4 flex items-center gap-3">
           <h1 className="text-3xl font-bold">{skill.displayName}</h1>

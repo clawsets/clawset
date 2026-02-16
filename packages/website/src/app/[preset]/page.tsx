@@ -11,6 +11,7 @@ import { PresetDocs } from "@/components/preset-docs";
 import { cronToHuman } from "@/lib/cron";
 import { prettyName } from "@/lib/utils";
 import { Download, ShieldCheck } from "lucide-react";
+import { SoftwareApplicationJsonLd } from "next-seo";
 
 export async function generateMetadata({
   params,
@@ -49,6 +50,13 @@ export default async function PresetPage({
 
   return (
     <div>
+      <SoftwareApplicationJsonLd
+        name={prettyName(preset.name)}
+        description={preset.description}
+        applicationCategory="DeveloperApplication"
+        operatingSystem="Any"
+        offers={{ price: 0, priceCurrency: "USD" }}
+      />
       <div className="mb-8">
         <div className="mb-4 flex items-center gap-3">
           <span className="shrink-0 text-4xl">{preset.identityEmoji}</span>
