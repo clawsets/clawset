@@ -96,6 +96,22 @@ export async function getAllSkills(
   return skills;
 }
 
+export function isPresetVerified(
+  preset: PresetData,
+  skills: Record<string, SkillData>
+): boolean {
+  if (preset.skills.length === 0) return false;
+  return preset.skills.every((s) => {
+    const skill = skills[s];
+    return (
+      skill &&
+      skill.source === "clawhub" &&
+      !skill.moderation?.isSuspicious &&
+      !skill.moderation?.isMalwareBlocked
+    );
+  });
+}
+
 export async function getSkillByName(
   name: string,
   presets: PresetData[]

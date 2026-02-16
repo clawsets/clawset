@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllPresetNames, getPresetByName, getAllPresets } from "@/lib/presets";
-import { getAllSkills } from "@/lib/skills";
+import { getAllSkills, isPresetVerified } from "@/lib/skills";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SkillBadge, SkillBadgePlain } from "@/components/skill-badge";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { InstallCommand } from "@/components/install-command";
 import { PresetDocs } from "@/components/preset-docs";
 import { cronToHuman } from "@/lib/cron";
 import { prettyName } from "@/lib/utils";
-import { Download } from "lucide-react";
+import { Download, ShieldCheck } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -52,6 +53,16 @@ export default async function PresetPage({
         <div className="mb-4 flex items-center gap-3">
           <span className="shrink-0 text-4xl">{preset.identityEmoji}</span>
           <h1 className="min-w-0 truncate text-3xl font-bold">{prettyName(preset.name)}</h1>
+          {isPresetVerified(preset, skills) && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="inline-flex shrink-0 text-green-500">
+                  <ShieldCheck size={20} />
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>All skills verified</TooltipContent>
+            </Tooltip>
+          )}
           <Badge variant="outline">v{preset.version}</Badge>
           <div className="ml-auto flex shrink-0 items-center gap-1 text-sm text-muted">
             <Download size={16} />

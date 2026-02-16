@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Download, Clock } from "lucide-react";
+import { Download, Clock, ShieldCheck } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { SkillBadge, SkillBadgePlain } from "@/components/skill-badge";
+import { isPresetVerified } from "@/lib/skills";
 import { cronToHuman } from "@/lib/cron";
 import { prettyName } from "@/lib/utils";
 import type { PresetData, SkillData } from "@/lib/types";
@@ -20,6 +21,8 @@ export function PresetCard({
   preset: PresetData;
   skills: Record<string, SkillData>;
 }) {
+  const verified = isPresetVerified(preset, skills);
+
   return (
     <Link href={`/${preset.name}`}>
       <Card className="flex h-full flex-col transition-colors hover:border-accent/40">
@@ -32,6 +35,16 @@ export function PresetCard({
               </CardTitle>
               <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-surface to-transparent" />
             </div>
+            {verified && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="inline-flex shrink-0 text-green-500">
+                    <ShieldCheck size={16} />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>All skills verified</TooltipContent>
+              </Tooltip>
+            )}
             <div className="flex shrink-0 items-center gap-1 text-xs text-muted">
               <Download size={14} />
               <span>{formatDownloads(preset.downloads)}</span>
