@@ -1,4 +1,4 @@
-# HEARTBEAT.md - CompWatch Daily Scan
+# HEARTBEAT.md - Competitor Radar Daily Scan
 
 On each heartbeat, run through this checklist:
 

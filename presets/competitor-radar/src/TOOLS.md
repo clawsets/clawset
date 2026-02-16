@@ -1,4 +1,4 @@
-# TOOLS.md - CompWatch Tools
+# TOOLS.md - Competitor Radar Tools
 
 ## GitHub (`gh` CLI)
 Track competitor repos, releases, issues, and pull requests.

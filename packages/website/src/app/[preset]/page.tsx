@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllPresetNames, getPresetByName } from "@/lib/presets";
+import { getAllPresetNames, getPresetByName, getAllPresets } from "@/lib/presets";
+import { getAllSkills } from "@/lib/skills";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SkillBadge, SkillBadgePlain } from "@/components/skill-badge";
 import { InstallCommand } from "@/components/install-command";
 import { PresetDocs } from "@/components/preset-docs";
 import { cronToHuman } from "@/lib/cron";
@@ -39,6 +41,9 @@ export default async function PresetPage({
     notFound();
   }
 
+  const allPresets = await getAllPresets();
+  const skills = await getAllSkills(allPresets);
+
   const reportUrl = `https://github.com/clawsets/clawset/issues/new?title=${encodeURIComponent(`[Preset] ${preset.name}:`)}&labels=preset`;
 
   return (
@@ -62,11 +67,13 @@ export default async function PresetPage({
             Skills
           </h2>
           <div className="flex flex-wrap gap-1.5">
-            {preset.skills.map((skill) => (
-              <Badge key={skill} variant="accent">
-                {skill}
-              </Badge>
-            ))}
+            {preset.skills.map((skill) =>
+              skills[skill] ? (
+                <SkillBadge key={skill} skill={skills[skill]} />
+              ) : (
+                <SkillBadgePlain key={skill} name={skill} />
+              )
+            )}
           </div>
         </div>
 

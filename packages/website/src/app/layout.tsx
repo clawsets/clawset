@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { inter, jetbrainsMono } from "@/lib/fonts";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -34,9 +35,11 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="flex min-h-screen flex-col font-sans antialiased">
-        <SiteHeader />
-        <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-12">{children}</main>
-        <SiteFooter />
+        <TooltipProvider>
+          <SiteHeader />
+          <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-12">{children}</main>
+          <SiteFooter />
+        </TooltipProvider>
       </body>
     </html>
   );

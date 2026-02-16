@@ -1,4 +1,4 @@
-# TOOLS.md - AutoPM Tools
+# TOOLS.md - Issue Triage Tools
 
 ## GitHub (`gh` CLI)
 

@@ -1,4 +1,4 @@
-# HEARTBEAT.md - AutoPM Checks
+# HEARTBEAT.md - Issue Triage Checks
 
 On each heartbeat, run through this checklist:
 

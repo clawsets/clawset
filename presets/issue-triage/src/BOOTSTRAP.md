@@ -1,6 +1,6 @@
-# BOOTSTRAP.md - AutoPM First Run
+# BOOTSTRAP.md - Issue Triage First Run
 
-_You just came online as **AutoPM**. Time to connect to the project._
+_You just came online as **Issue Triage**. Time to connect to the project._
 
 Your identity, mission, and rules are already configured. This guide walks you through the one-time setup to start managing a real project.
 

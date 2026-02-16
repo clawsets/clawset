@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { Download } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Download, Clock } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { SkillBadge, SkillBadgePlain } from "@/components/skill-badge";
 import { cronToHuman } from "@/lib/cron";
 import { prettyName } from "@/lib/utils";
-import type { PresetData } from "@/lib/types";
+import type { PresetData, SkillData } from "@/lib/types";
 
 function formatDownloads(count: number): string {
   if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1)}M`;
@@ -12,7 +13,13 @@ function formatDownloads(count: number): string {
   return count.toLocaleString();
 }
 
-export function PresetCard({ preset }: { preset: PresetData }) {
+export function PresetCard({
+  preset,
+  skills,
+}: {
+  preset: PresetData;
+  skills: Record<string, SkillData>;
+}) {
   return (
     <Link href={`/${preset.name}`}>
       <Card className="flex h-full flex-col transition-colors hover:border-accent/40">
@@ -33,14 +40,23 @@ export function PresetCard({ preset }: { preset: PresetData }) {
           <CardDescription>{preset.description}</CardDescription>
         </CardHeader>
         <CardContent className="mt-auto">
-          <div className="flex flex-wrap gap-1.5">
-            {preset.skills.map((skill) => (
-              <Badge key={skill} variant="accent">
-                {skill}
-              </Badge>
-            ))}
+          <div className="flex flex-wrap items-center gap-1.5">
+            {preset.skills.map((skill) =>
+              skills[skill] ? (
+                <SkillBadge key={skill} skill={skills[skill]} linked={false} />
+              ) : (
+                <SkillBadgePlain key={skill} name={skill} />
+              )
+            )}
             {preset.cron && (
-              <Badge variant="outline">{cronToHuman(preset.cron)}</Badge>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="inline-flex cursor-default text-muted">
+                    <Clock size={14} />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>{cronToHuman(preset.cron)}</TooltipContent>
+              </Tooltip>
             )}
           </div>
         </CardContent>

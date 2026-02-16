@@ -9,3 +9,15 @@ export interface PresetData {
   identityEmoji: string;
   downloads: number;
 }
+
+export interface SkillData {
+  slug: string;
+  displayName: string;
+  summary: string | null;
+  owner: { handle: string; displayName?: string; image?: string } | null;
+  moderation: { isSuspicious: boolean; isMalwareBlocked: boolean } | null;
+  stats: { downloads: number; stars: number; installs: number } | null;
+  version: string | null;
+  presets: string[];
+  source: "clawhub" | "native";
+}

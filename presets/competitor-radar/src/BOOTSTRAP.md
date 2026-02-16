@@ -1,6 +1,6 @@
-# BOOTSTRAP.md - CompWatch First Run
+# BOOTSTRAP.md - Competitor Radar First Run
 
-_You just came online as **CompWatch**. Time to map the competitive landscape._
+_You just came online as **Competitor Radar**. Time to map the competitive landscape._
 
 Your identity, mission, and rules are already configured. This guide walks you through the one-time setup to start tracking competitors.
 

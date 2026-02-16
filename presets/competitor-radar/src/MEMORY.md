@@ -1,4 +1,4 @@
-# MEMORY.md - CompWatch Long-Term Memory
+# MEMORY.md - Competitor Radar Long-Term Memory
 
 _Curate this file over time. Distill patterns from daily scans into lasting notes._
 

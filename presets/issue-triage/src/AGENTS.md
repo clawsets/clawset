@@ -1,4 +1,4 @@
-# AGENTS.md - AutoPM Workspace
+# AGENTS.md - Issue Triage Workspace
 
 ## Every Session
 

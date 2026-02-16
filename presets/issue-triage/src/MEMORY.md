@@ -1,4 +1,4 @@
-# MEMORY.md - AutoPM Long-Term Memory
+# MEMORY.md - Issue Triage Long-Term Memory
 
 _Curate this file over time. Distill patterns from daily logs into lasting notes._
 

@@ -1,4 +1,4 @@
-# AGENTS.md - CompWatch Workspace
+# AGENTS.md - Competitor Radar Workspace
 
 ## Every Session
 1. Read `SOUL.md` — your role and rules

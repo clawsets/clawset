@@ -3,9 +3,15 @@
 import { useState, useEffect, useRef } from "react";
 import { Search } from "lucide-react";
 import { PresetCard } from "@/components/preset-card";
-import type { PresetData } from "@/lib/types";
+import type { PresetData, SkillData } from "@/lib/types";
 
-export function SearchPresets({ presets }: { presets: PresetData[] }) {
+export function SearchPresets({
+  presets,
+  skills,
+}: {
+  presets: PresetData[];
+  skills: Record<string, SkillData>;
+}) {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -66,7 +72,7 @@ export function SearchPresets({ presets }: { presets: PresetData[] }) {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((preset) => (
-            <PresetCard key={preset.name} preset={preset} />
+            <PresetCard key={preset.name} preset={preset} skills={skills} />
           ))}
         </div>
       )}
